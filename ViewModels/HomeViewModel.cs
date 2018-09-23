@@ -12,18 +12,13 @@ namespace Chambers.ViewModels
         public List<Character> Characters { get; set; }
         public List<Affliction> ArbiterAfflictions { get; set; }
         public List<Affliction> VictimAfflictions { get; set; }
-        
-        public Character LeftArbiter { get; set; }
-        public Character RightArbiter { get; set; }
-        public Character LeftVictim { get; set; }
-        public Character RightVictim { get; set; }
 
-        public Affliction LeftArbiterAfflication { get; set; }
-        public Affliction RightArbiterAffliction { get; set; }
-        public Affliction LeftVictimAffliction { get; set; }
-        public Affliction RightVictimAffliction { get; set; }
-
-        public bool UseSelflessness { get; set; }
-        public bool UseFrustation { get; set; }
+        public HomeViewModel()
+        {
+            var _db = new Entities();
+            this.Characters = _db.GetCharacters();
+            this.ArbiterAfflictions = _db.GetRegularAfflictions();
+            this.VictimAfflictions = _db.GetVictimAfflictions();
+        }
     }
 }
