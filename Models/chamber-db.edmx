@@ -36,10 +36,42 @@
           <Property Name="ProgressionText" Type="nvarchar(max)" />
           <Property Name="FinaleText" Type="nvarchar(max)" />
         </EntityType>
+        <Association Name="FK_CharacterAffliction_Affliction">
+          <End Role="Affliction" Type="Self.Affliction" Multiplicity="1" />
+          <End Role="CharacterAffliction" Type="Self.CharacterAffliction" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Affliction">
+              <PropertyRef Name="AfflicationId" />
+            </Principal>
+            <Dependent Role="CharacterAffliction">
+              <PropertyRef Name="AfflictionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CharacterAffliction_Character">
+          <End Role="Character" Type="Self.Character" Multiplicity="0..1" />
+          <End Role="CharacterAffliction" Type="Self.CharacterAffliction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Character">
+              <PropertyRef Name="CharacterId" />
+            </Principal>
+            <Dependent Role="CharacterAffliction">
+              <PropertyRef Name="CharacterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="ModelStoreContainer">
           <EntitySet Name="Affliction" EntityType="Self.Affliction" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Character" EntityType="Self.Character" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CharacterAffliction" EntityType="Self.CharacterAffliction" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_CharacterAffliction_Affliction" Association="Self.FK_CharacterAffliction_Affliction">
+            <End Role="Affliction" EntitySet="Affliction" />
+            <End Role="CharacterAffliction" EntitySet="CharacterAffliction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CharacterAffliction_Character" Association="Self.FK_CharacterAffliction_Character">
+            <End Role="Character" EntitySet="Character" />
+            <End Role="CharacterAffliction" EntitySet="CharacterAffliction" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -49,12 +81,12 @@
           <EntitySet Name="Afflictions" EntityType="Model.Affliction" />
           <EntitySet Name="Characters" EntityType="Model.Character" />
           <EntitySet Name="CharacterAfflictions" EntityType="Model.CharacterAffliction" />
-          <AssociationSet Name="CharacterCharacterAffliction" Association="Model.CharacterCharacterAffliction">
-            <End Role="Character" EntitySet="Characters" />
+          <AssociationSet Name="FK_CharacterAffliction_Affliction" Association="Model.FK_CharacterAffliction_Affliction">
+            <End Role="Affliction" EntitySet="Afflictions" />
             <End Role="CharacterAffliction" EntitySet="CharacterAfflictions" />
           </AssociationSet>
-          <AssociationSet Name="AfflictionCharacterAffliction" Association="Model.AfflictionCharacterAffliction">
-            <End Role="Affliction" EntitySet="Afflictions" />
+          <AssociationSet Name="FK_CharacterAffliction_Character" Association="Model.FK_CharacterAffliction_Character">
+            <End Role="Character" EntitySet="Characters" />
             <End Role="CharacterAffliction" EntitySet="CharacterAfflictions" />
           </AssociationSet>
         </EntityContainer>
@@ -66,7 +98,7 @@
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="NumStages" Type="Int32" Nullable="false" />
           <Property Name="IsAdvancedIllness" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="CharacterAfflictions" Relationship="Model.AfflictionCharacterAffliction" FromRole="Affliction" ToRole="CharacterAffliction" />
+          <NavigationProperty Name="CharacterAffliction" Relationship="Model.FK_CharacterAffliction_Affliction" FromRole="Affliction" ToRole="CharacterAffliction" />
         </EntityType>
         <EntityType Name="Character">
           <Key>
@@ -77,7 +109,7 @@
           <Property Name="Sex" Type="Boolean" Nullable="false" />
           <Property Name="Selflessness" Type="Int32" Nullable="false" />
           <Property Name="Frustration" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="CharacterAfflictions" Relationship="Model.CharacterCharacterAffliction" FromRole="Character" ToRole="CharacterAffliction" />
+          <NavigationProperty Name="CharacterAfflictions" Relationship="Model.FK_CharacterAffliction_Character" FromRole="Character" ToRole="CharacterAffliction" />
         </EntityType>
         <EntityType Name="CharacterAffliction">
           <Key>
@@ -90,16 +122,32 @@
           <Property Name="OpponentVoteText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ProgressionText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="FinaleText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Character" Relationship="Model.CharacterCharacterAffliction" FromRole="CharacterAffliction" ToRole="Character" />
-          <NavigationProperty Name="Affliction" Relationship="Model.AfflictionCharacterAffliction" FromRole="CharacterAffliction" ToRole="Affliction" />
+          <NavigationProperty Name="Affliction" Relationship="Model.FK_CharacterAffliction_Affliction" FromRole="CharacterAffliction" ToRole="Affliction" />
+          <NavigationProperty Name="Character" Relationship="Model.FK_CharacterAffliction_Character" FromRole="CharacterAffliction" ToRole="Character" />
         </EntityType>
-        <Association Name="CharacterCharacterAffliction">
-          <End Type="Model.Character" Role="Character" Multiplicity="1" />
-          <End Type="Model.CharacterAffliction" Role="CharacterAffliction" Multiplicity="*" />
-        </Association>
-        <Association Name="AfflictionCharacterAffliction">
+        <Association Name="FK_CharacterAffliction_Affliction">
           <End Type="Model.Affliction" Role="Affliction" Multiplicity="1" />
+          <End Type="Model.CharacterAffliction" Role="CharacterAffliction" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Affliction">
+              <PropertyRef Name="AfflicationId" />
+            </Principal>
+            <Dependent Role="CharacterAffliction">
+              <PropertyRef Name="AfflictionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CharacterAffliction_Character">
+          <End Type="Model.Character" Role="Character" Multiplicity="0..1" />
           <End Type="Model.CharacterAffliction" Role="CharacterAffliction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Character">
+              <PropertyRef Name="CharacterId" />
+            </Principal>
+            <Dependent Role="CharacterAffliction">
+              <PropertyRef Name="CharacterID" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -107,7 +155,7 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="Entities">
-        <EntitySetMapping Name="Afflictions">
+          <EntitySetMapping Name="Afflictions">
             <EntityTypeMapping TypeName="Model.Affliction">
               <MappingFragment StoreEntitySet="Affliction">
                 <ScalarProperty Name="IsAdvancedIllness" ColumnName="IsAdvancedIllness" />

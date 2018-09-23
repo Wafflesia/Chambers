@@ -22,7 +22,7 @@ namespace Chambers.Models
         public string ProgressionText { get; set; }
         public string FinaleText { get; set; }
     
-        public virtual Character Character { get; set; }
         public virtual Affliction Affliction { get; set; }
+        public virtual Character Character { get; set; }
     }
 }
