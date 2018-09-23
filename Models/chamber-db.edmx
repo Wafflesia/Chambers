@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Affliction">
+          <Key>
+            <PropertyRef Name="AfflicationId" />
+          </Key>
+          <Property Name="AfflicationId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="NumStages" Type="int" Nullable="false" />
+          <Property Name="IsAdvancedIllness" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Character">
+          <Key>
+            <PropertyRef Name="CharacterId" />
+          </Key>
+          <Property Name="CharacterId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Sex" Type="bit" Nullable="false" />
+          <Property Name="Selflessness" Type="int" Nullable="false" />
+          <Property Name="Frustration" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CharacterAffliction">
+          <Key>
+            <PropertyRef Name="AfflictionID" />
+          </Key>
+          <Property Name="AfflictionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CharacterID" Type="int" />
+          <Property Name="Stage" Type="int" />
+          <Property Name="SelfVoteText" Type="nvarchar(max)" />
+          <Property Name="OpponentVoteText" Type="nvarchar(max)" />
+          <Property Name="ProgressionText" Type="nvarchar(max)" />
+          <Property Name="FinaleText" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityContainer Name="ModelStoreContainer">
+          <EntitySet Name="Affliction" EntityType="Self.Affliction" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Character" EntityType="Self.Character" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CharacterAffliction" EntityType="Self.CharacterAffliction" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Afflictions" EntityType="Model.Affliction" />
+          <EntitySet Name="Characters" EntityType="Model.Character" />
+          <EntitySet Name="CharacterAfflictions" EntityType="Model.CharacterAffliction" />
+          <AssociationSet Name="CharacterCharacterAffliction" Association="Model.CharacterCharacterAffliction">
+            <End Role="Character" EntitySet="Characters" />
+            <End Role="CharacterAffliction" EntitySet="CharacterAfflictions" />
+          </AssociationSet>
+          <AssociationSet Name="AfflictionCharacterAffliction" Association="Model.AfflictionCharacterAffliction">
+            <End Role="Affliction" EntitySet="Afflictions" />
+            <End Role="CharacterAffliction" EntitySet="CharacterAfflictions" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Affliction">
+          <Key>
+            <PropertyRef Name="AfflicationId" />
+          </Key>
+          <Property Name="AfflicationId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="NumStages" Type="Int32" Nullable="false" />
+          <Property Name="IsAdvancedIllness" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="CharacterAfflictions" Relationship="Model.AfflictionCharacterAffliction" FromRole="Affliction" ToRole="CharacterAffliction" />
+        </EntityType>
+        <EntityType Name="Character">
+          <Key>
+            <PropertyRef Name="CharacterId" />
+          </Key>
+          <Property Name="CharacterId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Sex" Type="Boolean" Nullable="false" />
+          <Property Name="Selflessness" Type="Int32" Nullable="false" />
+          <Property Name="Frustration" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CharacterAfflictions" Relationship="Model.CharacterCharacterAffliction" FromRole="Character" ToRole="CharacterAffliction" />
+        </EntityType>
+        <EntityType Name="CharacterAffliction">
+          <Key>
+            <PropertyRef Name="AfflictionID" />
+          </Key>
+          <Property Name="AfflictionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CharacterID" Type="Int32" />
+          <Property Name="Stage" Type="Int32" />
+          <Property Name="SelfVoteText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OpponentVoteText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ProgressionText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FinaleText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Character" Relationship="Model.CharacterCharacterAffliction" FromRole="CharacterAffliction" ToRole="Character" />
+          <NavigationProperty Name="Affliction" Relationship="Model.AfflictionCharacterAffliction" FromRole="CharacterAffliction" ToRole="Affliction" />
+        </EntityType>
+        <Association Name="CharacterCharacterAffliction">
+          <End Type="Model.Character" Role="Character" Multiplicity="1" />
+          <End Type="Model.CharacterAffliction" Role="CharacterAffliction" Multiplicity="*" />
+        </Association>
+        <Association Name="AfflictionCharacterAffliction">
+          <End Type="Model.Affliction" Role="Affliction" Multiplicity="1" />
+          <End Type="Model.CharacterAffliction" Role="CharacterAffliction" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="Entities">
+        <EntitySetMapping Name="Afflictions">
+            <EntityTypeMapping TypeName="Model.Affliction">
+              <MappingFragment StoreEntitySet="Affliction">
+                <ScalarProperty Name="IsAdvancedIllness" ColumnName="IsAdvancedIllness" />
+                <ScalarProperty Name="NumStages" ColumnName="NumStages" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="AfflicationId" ColumnName="AfflicationId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Characters">
+            <EntityTypeMapping TypeName="Model.Character">
+              <MappingFragment StoreEntitySet="Character">
+                <ScalarProperty Name="Frustration" ColumnName="Frustration" />
+                <ScalarProperty Name="Selflessness" ColumnName="Selflessness" />
+                <ScalarProperty Name="Sex" ColumnName="Sex" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CharacterId" ColumnName="CharacterId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CharacterAfflictions">
+            <EntityTypeMapping TypeName="Model.CharacterAffliction">
+              <MappingFragment StoreEntitySet="CharacterAffliction">
+                <ScalarProperty Name="FinaleText" ColumnName="FinaleText" />
+                <ScalarProperty Name="ProgressionText" ColumnName="ProgressionText" />
+                <ScalarProperty Name="OpponentVoteText" ColumnName="OpponentVoteText" />
+                <ScalarProperty Name="SelfVoteText" ColumnName="SelfVoteText" />
+                <ScalarProperty Name="Stage" ColumnName="Stage" />
+                <ScalarProperty Name="CharacterID" ColumnName="CharacterID" />
+                <ScalarProperty Name="AfflictionID" ColumnName="AfflictionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
