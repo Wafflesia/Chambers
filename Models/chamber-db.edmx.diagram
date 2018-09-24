@@ -5,8 +5,8 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="e9e8bf4ef0554697b9ef7c43b3ffa42c" Name="Diagram1">
-        <EntityTypeShape EntityType="Model.Affliction" Width="1.5" PointX="0.75" PointY="5.375" />
-        <EntityTypeShape EntityType="Model.Character" Width="1.5" PointX="0.75" PointY="1.25" />
+        <EntityTypeShape EntityType="Model.Affliction" Width="1.5" PointX="0.75" PointY="1.5" />
+        <EntityTypeShape EntityType="Model.Character" Width="1.5" PointX="0.75" PointY="5.375" />
         <EntityTypeShape EntityType="Model.CharacterAffliction" Width="1.5" PointX="3" PointY="1" />
         <AssociationConnector Association="Model.FK_CharacterAffliction_Affliction" />
         <AssociationConnector Association="Model.FK_CharacterAffliction_Character" />

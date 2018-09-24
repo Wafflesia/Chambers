@@ -24,7 +24,8 @@ namespace Chambers.Models
         public string Name { get; set; }
         public bool Sex { get; set; }
         public int Selflessness { get; set; }
-        public int Frustration { get; set; }
+        public int Compromise { get; set; }
+        public Nullable<int> Reluctance { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CharacterAffliction> CharacterAfflictions { get; set; }

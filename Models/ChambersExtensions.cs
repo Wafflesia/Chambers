@@ -24,5 +24,20 @@ namespace Chambers.Models
         {
             return Afflictions.Where(a => !a.IsAdvancedIllness).ToList();
         }
+
+        public List<CharacterAffliction> GetCharacterStages(int characterID, int afflictionID)
+        {
+            var stages = CharacterAfflictions.Where(c => c.CharacterID == characterID && c.AfflictionID == afflictionID).ToList();
+            if (!stages.Any())
+            {
+                stages = GetDefaultStages(afflictionID);
+            }
+            return stages.OrderBy(s => s.Stage).ToList();
+        }
+
+        public List<CharacterAffliction> GetDefaultStages(int afflictionID)
+        {
+            return CharacterAfflictions.Where(c => c.AfflictionID == afflictionID).ToList();
+        }
     }
 }

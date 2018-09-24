@@ -9,7 +9,7 @@
           <Key>
             <PropertyRef Name="AfflicationId" />
           </Key>
-          <Property Name="AfflicationId" Type="int" Nullable="false" />
+          <Property Name="AfflicationId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="50" />
           <Property Name="NumStages" Type="int" Nullable="false" />
           <Property Name="IsAdvancedIllness" Type="bit" Nullable="false" />
@@ -22,19 +22,24 @@
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Sex" Type="bit" Nullable="false" />
           <Property Name="Selflessness" Type="int" Nullable="false" />
-          <Property Name="Frustration" Type="int" Nullable="false" />
+          <Property Name="Compromise" Type="int" Nullable="false" />
+          <Property Name="Reluctance" Type="int" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Chambers-Sql.dbo.CharacterAffliction' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="CharacterAffliction">
           <Key>
             <PropertyRef Name="AfflictionID" />
           </Key>
-          <Property Name="AfflictionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AfflictionID" Type="int" Nullable="false" />
           <Property Name="CharacterID" Type="int" />
           <Property Name="Stage" Type="int" />
           <Property Name="SelfVoteText" Type="nvarchar(max)" />
           <Property Name="OpponentVoteText" Type="nvarchar(max)" />
           <Property Name="ProgressionText" Type="nvarchar(max)" />
           <Property Name="FinaleText" Type="nvarchar(max)" />
+          <Property Name="Descriptor" Type="nvarchar(max)" />
+          <Property Name="VoteFailureReaction" Type="nvarchar(max)" />
         </EntityType>
         <Association Name="FK_CharacterAffliction_Affliction">
           <End Role="Affliction" Type="Self.Affliction" Multiplicity="1" />
@@ -63,7 +68,19 @@
         <EntityContainer Name="ModelStoreContainer">
           <EntitySet Name="Affliction" EntityType="Self.Affliction" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Character" EntityType="Self.Character" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="CharacterAffliction" EntityType="Self.CharacterAffliction" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CharacterAffliction" EntityType="Self.CharacterAffliction" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [CharacterAffliction].[AfflictionID] AS [AfflictionID], 
+    [CharacterAffliction].[CharacterID] AS [CharacterID], 
+    [CharacterAffliction].[Stage] AS [Stage], 
+    [CharacterAffliction].[SelfVoteText] AS [SelfVoteText], 
+    [CharacterAffliction].[OpponentVoteText] AS [OpponentVoteText], 
+    [CharacterAffliction].[ProgressionText] AS [ProgressionText], 
+    [CharacterAffliction].[FinaleText] AS [FinaleText], 
+    [CharacterAffliction].[Descriptor] AS [Descriptor], 
+    [CharacterAffliction].[VoteFailureReaction] AS [VoteFailureReaction]
+    FROM [dbo].[CharacterAffliction] AS [CharacterAffliction]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_CharacterAffliction_Affliction" Association="Self.FK_CharacterAffliction_Affliction">
             <End Role="Affliction" EntitySet="Affliction" />
             <End Role="CharacterAffliction" EntitySet="CharacterAffliction" />
@@ -94,7 +111,7 @@
           <Key>
             <PropertyRef Name="AfflicationId" />
           </Key>
-          <Property Name="AfflicationId" Type="Int32" Nullable="false" />
+          <Property Name="AfflicationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="NumStages" Type="Int32" Nullable="false" />
           <Property Name="IsAdvancedIllness" Type="Boolean" Nullable="false" />
@@ -108,20 +125,23 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Sex" Type="Boolean" Nullable="false" />
           <Property Name="Selflessness" Type="Int32" Nullable="false" />
-          <Property Name="Frustration" Type="Int32" Nullable="false" />
+          <Property Name="Compromise" Type="Int32" Nullable="false" />
+          <Property Name="Reluctance" Type="Int32" />
           <NavigationProperty Name="CharacterAfflictions" Relationship="Model.FK_CharacterAffliction_Character" FromRole="Character" ToRole="CharacterAffliction" />
         </EntityType>
         <EntityType Name="CharacterAffliction">
           <Key>
             <PropertyRef Name="AfflictionID" />
           </Key>
-          <Property Name="AfflictionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AfflictionID" Type="Int32" Nullable="false" />
           <Property Name="CharacterID" Type="Int32" />
           <Property Name="Stage" Type="Int32" />
           <Property Name="SelfVoteText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="OpponentVoteText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ProgressionText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="FinaleText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Descriptor" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="VoteFailureReaction" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Affliction" Relationship="Model.FK_CharacterAffliction_Affliction" FromRole="CharacterAffliction" ToRole="Affliction" />
           <NavigationProperty Name="Character" Relationship="Model.FK_CharacterAffliction_Character" FromRole="CharacterAffliction" ToRole="Character" />
         </EntityType>
@@ -168,7 +188,8 @@
           <EntitySetMapping Name="Characters">
             <EntityTypeMapping TypeName="Model.Character">
               <MappingFragment StoreEntitySet="Character">
-                <ScalarProperty Name="Frustration" ColumnName="Frustration" />
+                <ScalarProperty Name="Reluctance" ColumnName="Reluctance" />
+                <ScalarProperty Name="Compromise" ColumnName="Compromise" />
                 <ScalarProperty Name="Selflessness" ColumnName="Selflessness" />
                 <ScalarProperty Name="Sex" ColumnName="Sex" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -179,6 +200,8 @@
           <EntitySetMapping Name="CharacterAfflictions">
             <EntityTypeMapping TypeName="Model.CharacterAffliction">
               <MappingFragment StoreEntitySet="CharacterAffliction">
+                <ScalarProperty Name="VoteFailureReaction" ColumnName="VoteFailureReaction" />
+                <ScalarProperty Name="Descriptor" ColumnName="Descriptor" />
                 <ScalarProperty Name="FinaleText" ColumnName="FinaleText" />
                 <ScalarProperty Name="ProgressionText" ColumnName="ProgressionText" />
                 <ScalarProperty Name="OpponentVoteText" ColumnName="OpponentVoteText" />

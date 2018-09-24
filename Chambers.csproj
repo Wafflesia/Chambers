@@ -173,7 +173,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>chamber-db.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\ChambersContext.cs" />
     <Compile Include="Models\ChambersExtensions.cs" />
     <Compile Include="Models\Character.cs">
       <DependentUpon>chamber-db.tt</DependentUpon>

@@ -21,6 +21,8 @@ namespace Chambers.Models
         public string OpponentVoteText { get; set; }
         public string ProgressionText { get; set; }
         public string FinaleText { get; set; }
+        public string Descriptor { get; set; }
+        public string VoteFailureReaction { get; set; }
     
         public virtual Affliction Affliction { get; set; }
         public virtual Character Character { get; set; }
