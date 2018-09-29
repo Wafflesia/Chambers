@@ -25,14 +25,13 @@
           <Property Name="Compromise" Type="int" Nullable="false" />
           <Property Name="Reluctance" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'Chambers-Sql.dbo.CharacterAffliction' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="CharacterAffliction">
           <Key>
-            <PropertyRef Name="AfflictionID" />
+            <PropertyRef Name="CharacterAfflictionID" />
           </Key>
+          <Property Name="CharacterAfflictionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="AfflictionID" Type="int" Nullable="false" />
-          <Property Name="CharacterID" Type="int" />
+          <Property Name="CharacterID" Type="int" Nullable="false" />
           <Property Name="Stage" Type="int" />
           <Property Name="SelfVoteText" Type="nvarchar(max)" />
           <Property Name="OpponentVoteText" Type="nvarchar(max)" />
@@ -43,7 +42,7 @@ warning 6002: The table/view 'Chambers-Sql.dbo.CharacterAffliction' does not hav
         </EntityType>
         <Association Name="FK_CharacterAffliction_Affliction">
           <End Role="Affliction" Type="Self.Affliction" Multiplicity="1" />
-          <End Role="CharacterAffliction" Type="Self.CharacterAffliction" Multiplicity="0..1" />
+          <End Role="CharacterAffliction" Type="Self.CharacterAffliction" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Affliction">
               <PropertyRef Name="AfflicationId" />
@@ -54,7 +53,7 @@ warning 6002: The table/view 'Chambers-Sql.dbo.CharacterAffliction' does not hav
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CharacterAffliction_Character">
-          <End Role="Character" Type="Self.Character" Multiplicity="0..1" />
+          <End Role="Character" Type="Self.Character" Multiplicity="1" />
           <End Role="CharacterAffliction" Type="Self.CharacterAffliction" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Character">
@@ -68,19 +67,7 @@ warning 6002: The table/view 'Chambers-Sql.dbo.CharacterAffliction' does not hav
         <EntityContainer Name="ModelStoreContainer">
           <EntitySet Name="Affliction" EntityType="Self.Affliction" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Character" EntityType="Self.Character" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="CharacterAffliction" EntityType="Self.CharacterAffliction" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [CharacterAffliction].[AfflictionID] AS [AfflictionID], 
-    [CharacterAffliction].[CharacterID] AS [CharacterID], 
-    [CharacterAffliction].[Stage] AS [Stage], 
-    [CharacterAffliction].[SelfVoteText] AS [SelfVoteText], 
-    [CharacterAffliction].[OpponentVoteText] AS [OpponentVoteText], 
-    [CharacterAffliction].[ProgressionText] AS [ProgressionText], 
-    [CharacterAffliction].[FinaleText] AS [FinaleText], 
-    [CharacterAffliction].[Descriptor] AS [Descriptor], 
-    [CharacterAffliction].[VoteFailureReaction] AS [VoteFailureReaction]
-    FROM [dbo].[CharacterAffliction] AS [CharacterAffliction]</DefiningQuery>
-          </EntitySet>
+          <EntitySet Name="CharacterAffliction" EntityType="Self.CharacterAffliction" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_CharacterAffliction_Affliction" Association="Self.FK_CharacterAffliction_Affliction">
             <End Role="Affliction" EntitySet="Affliction" />
             <End Role="CharacterAffliction" EntitySet="CharacterAffliction" />
@@ -115,7 +102,7 @@ warning 6002: The table/view 'Chambers-Sql.dbo.CharacterAffliction' does not hav
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="NumStages" Type="Int32" Nullable="false" />
           <Property Name="IsAdvancedIllness" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="CharacterAffliction" Relationship="Model.FK_CharacterAffliction_Affliction" FromRole="Affliction" ToRole="CharacterAffliction" />
+          <NavigationProperty Name="CharacterAfflictions" Relationship="Model.FK_CharacterAffliction_Affliction" FromRole="Affliction" ToRole="CharacterAffliction" />
         </EntityType>
         <EntityType Name="Character">
           <Key>
@@ -131,10 +118,11 @@ warning 6002: The table/view 'Chambers-Sql.dbo.CharacterAffliction' does not hav
         </EntityType>
         <EntityType Name="CharacterAffliction">
           <Key>
-            <PropertyRef Name="AfflictionID" />
+            <PropertyRef Name="CharacterAfflictionID" />
           </Key>
+          <Property Name="CharacterAfflictionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="AfflictionID" Type="Int32" Nullable="false" />
-          <Property Name="CharacterID" Type="Int32" />
+          <Property Name="CharacterID" Type="Int32" Nullable="false" />
           <Property Name="Stage" Type="Int32" />
           <Property Name="SelfVoteText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="OpponentVoteText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -147,7 +135,7 @@ warning 6002: The table/view 'Chambers-Sql.dbo.CharacterAffliction' does not hav
         </EntityType>
         <Association Name="FK_CharacterAffliction_Affliction">
           <End Type="Model.Affliction" Role="Affliction" Multiplicity="1" />
-          <End Type="Model.CharacterAffliction" Role="CharacterAffliction" Multiplicity="0..1" />
+          <End Type="Model.CharacterAffliction" Role="CharacterAffliction" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Affliction">
               <PropertyRef Name="AfflicationId" />
@@ -158,7 +146,7 @@ warning 6002: The table/view 'Chambers-Sql.dbo.CharacterAffliction' does not hav
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CharacterAffliction_Character">
-          <End Type="Model.Character" Role="Character" Multiplicity="0..1" />
+          <End Type="Model.Character" Role="Character" Multiplicity="1" />
           <End Type="Model.CharacterAffliction" Role="CharacterAffliction" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Character">
@@ -169,7 +157,7 @@ warning 6002: The table/view 'Chambers-Sql.dbo.CharacterAffliction' does not hav
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -209,6 +197,7 @@ warning 6002: The table/view 'Chambers-Sql.dbo.CharacterAffliction' does not hav
                 <ScalarProperty Name="Stage" ColumnName="Stage" />
                 <ScalarProperty Name="CharacterID" ColumnName="CharacterID" />
                 <ScalarProperty Name="AfflictionID" ColumnName="AfflictionID" />
+                <ScalarProperty Name="CharacterAfflictionID" ColumnName="CharacterAfflictionID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

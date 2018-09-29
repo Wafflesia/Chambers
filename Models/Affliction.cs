@@ -14,11 +14,18 @@ namespace Chambers.Models
     
     public partial class Affliction
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Affliction()
+        {
+            this.CharacterAfflictions = new HashSet<CharacterAffliction>();
+        }
+    
         public int AfflicationId { get; set; }
         public string Name { get; set; }
         public int NumStages { get; set; }
         public bool IsAdvancedIllness { get; set; }
     
-        public virtual CharacterAffliction CharacterAffliction { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CharacterAffliction> CharacterAfflictions { get; set; }
     }
 }

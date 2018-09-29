@@ -14,8 +14,9 @@ namespace Chambers.Models
     
     public partial class CharacterAffliction
     {
+        public int CharacterAfflictionID { get; set; }
         public int AfflictionID { get; set; }
-        public Nullable<int> CharacterID { get; set; }
+        public int CharacterID { get; set; }
         public Nullable<int> Stage { get; set; }
         public string SelfVoteText { get; set; }
         public string OpponentVoteText { get; set; }

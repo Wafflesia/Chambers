@@ -5,34 +5,35 @@
 {
 <div>
 Left Player
-@Html.DropDownList("LeftArbiter", Model.Characters.ToSelectList(c => c.Name, c => c.CharacterId.ToString(), "--"))<br/>
+@Html.DropDownList("LeftArbiterID", Model.Characters.ToSelectList(c => c.Name, c => c.CharacterId.ToString(), "--"))<br/>
 
 Affliction
-@Html.DropDownList("LeftArbiterAffliction", Model.ArbiterAfflictions.ToSelectList(a => a.Name, a => a.AfflicationId.ToString(), "--"))<br/>
+@Html.DropDownList("LeftArbiterAfflictionID", Model.ArbiterAfflictions.ToSelectList(a => a.Name, a => a.AfflicationId.ToString(), "--"))<br/>
 </div>
 
 <div>
 Right Player
-@Html.DropDownList("RightArbiter", Model.Characters.ToSelectList(c => c.Name, c => c.CharacterId.ToString(), "--"))
+@Html.DropDownList("RightArbiterID", Model.Characters.ToSelectList(c => c.Name, c => c.CharacterId.ToString(), "--"))
 
 Affliction
-@Html.DropDownList("LeftArbiterAffliction", Model.ArbiterAfflictions.ToSelectList(a => a.Name, a => a.AfflicationId.ToString(), "--"))<br />
+@Html.DropDownList("RightArbiterAfflictionID", Model.ArbiterAfflictions.ToSelectList(a => a.Name, a => a.AfflicationId.ToString(), "--"))<br />
 </div>
 
 
 <div>
 Left Victim
-@Html.DropDownList("LeftVictim", Model.Characters.ToSelectList(c => c.Name, c => c.CharacterId.ToString(), "--"))
+@Html.DropDownList("LeftVictimID", Model.Characters.ToSelectList(c => c.Name, c => c.CharacterId.ToString(), "--"))
 
 Affliction
-@Html.DropDownList("LeftVictimAffliction", Model.VictimAfflictions.ToSelectList(a => a.Name, a => a.AfflicationId.ToString(), "--"))<br />
+@Html.DropDownList("LeftVictimAfflictionID", Model.VictimAfflictions.ToSelectList(a => a.Name, a => a.AfflicationId.ToString(), "--"))<br />
 </div>
 
 <div>
 Right Victim
-@Html.DropDownList("RightVictim", Model.Characters.ToSelectList(c => c.Name, c => c.CharacterId.ToString(), "--"))
+@Html.DropDownList("RightVictimID", Model.Characters.ToSelectList(c => c.Name, c => c.CharacterId.ToString(), "--"))
 
 Affliction
-@Html.DropDownList("RightVictimAffliction", Model.VictimAfflictions.ToSelectList(a => a.Name, a => a.AfflicationId.ToString(), "--"))<br />
+@Html.DropDownList("RightVictimAfflictionID", Model.VictimAfflictions.ToSelectList(a => a.Name, a => a.AfflicationId.ToString(), "--"))<br />
 </div>
+    <button type="submit">Submit</button>
 }

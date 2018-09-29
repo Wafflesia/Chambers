@@ -20,18 +20,19 @@ namespace Chambers.Controllers
             return View(vm);
         }
 
-        public ActionResult Story(StoryViewModel model)
+        public ActionResult Story(HomeViewModel model)
         {
             _party = MapStoryCharacters(model);
             var finished = false;
             var failures = 0;
             _vm = new FinishedStoryViewModel(_party);
             AddCharacterIntros();
+            var rnd = new Random();
             while (!finished)
             {
                 WriteText("Once again, the buttons in front of [LAName] and [RAName] light up, beckoning for them to make a decision...");
                 //Do the selection
-                var votes = Vote(failures);
+                var votes = Vote(failures, rnd);
 
                 foreach (var vote in votes)
                 {
@@ -42,27 +43,27 @@ namespace Chambers.Controllers
                 {
                     _party.LeftArbiter.CurrentReluctance += _party.LeftArbiter.Character.Reluctance.Value;
                     _party.RightArbiter.CurrentReluctance = 0;
-                    _party.LeftArbiter.CurrentStageNum++;
+                    _party.LeftArbiter.CurrentStageNum += 1;
                     WriteText(ParseTeamText(_party.LeftArbiter.CurrentStage.ProgressionText, _party.LeftArbiter));
                 }
                 else if (votes.All(v => !v.IsLeftVote))
                 {
                     _party.RightArbiter.CurrentReluctance += _party.RightArbiter.Character.Reluctance.Value;
                     _party.LeftArbiter.CurrentReluctance = 0;
-                    _party.RightArbiter.CurrentStageNum++;
+                    _party.RightArbiter.CurrentStageNum += 1;
                     WriteText(ParseTeamText(_party.RightArbiter.CurrentStage.ProgressionText, _party.RightArbiter));
                 }
                 else
                 {
-                    _party.LeftArbiter.CurrentReluctance -= 10;
-                    _party.RightArbiter.CurrentReluctance -= 10;
-                    WriteText(ParseTeamText(_party.LeftArbiter.CurrentStage.VoteFailureReaction, _party.LeftArbiter));
-                    WriteText(ParseTeamText(_party.RightArbiter.CurrentStage.VoteFailureReaction, _party.RightArbiter));
+                    _party.LeftArbiter.CurrentReluctance -= 5;
+                    _party.RightArbiter.CurrentReluctance -= 5;
+                   // WriteText(ParseTeamText(_party.LeftArbiter.CurrentStage.VoteFailureReaction, _party.LeftArbiter));
+                   // WriteText(ParseTeamText(_party.RightArbiter.CurrentStage.VoteFailureReaction, _party.RightArbiter));
 
-                    _party.LeftVictim.CurrentStageNum++;
-                    _party.RightVictim.CurrentStageNum++;
+                    _party.LeftVictim.CurrentStageNum += 1;
+                    _party.RightVictim.CurrentStageNum += 1;
                     WriteText(ParseTeamText(_party.LeftVictim.CurrentStage.ProgressionText, _party.LeftVictim));
-                    WriteText(ParseTeamText(_party.RightVictim.CurrentStage.ProgressionText, _party.RightVictim));
+                    //WriteText(ParseTeamText(_party.RightVictim.CurrentStage.ProgressionText, _party.RightVictim));
                     
                 }
                 //Advance stages, write text results
@@ -79,21 +80,21 @@ namespace Chambers.Controllers
         private void FinishStory()
         {
             WriteText("Suddenly the doors to the chambers hiss, the floors beneath them moving, depositing all of the changed adventurers outside.");
-            if (_party.IsLoss)
-            {
-                WriteText(_party.LeftArbiter.CurrentStage.FinaleText);
-                WriteText(_party.RightArbiter.CurrentStage.FinaleText);
+            //if (_party.IsLoss)
+           // {
+                WriteText(ParseTeamText(_party.LeftArbiter.CurrentStage.FinaleText, _party.LeftArbiter));
+                WriteText(ParseTeamText(_party.RightArbiter.CurrentStage.FinaleText, _party.RightArbiter));
                 WriteText("[LAName] and [RAName] rush outside as best they can and watch with horror as their former comrades are deposited on the conveyor in front of them.");
-                WriteText(_party.LeftVictim.CurrentStage.FinaleText);
-                WriteText(_party.RightVictim.CurrentStage.FinaleText);
-            }
-            else
-            {
-                WriteText(_party.Arbiters.Where(a => a != _party.Loser).FirstOrDefault().CurrentStage.FinaleText);
-                WriteText(_party.LeftVictim.CurrentStage.FinaleText);
-                WriteText(_party.RightVictim.CurrentStage.FinaleText);
-                WriteText(_party.Loser.CurrentStage.FinaleText);
-            }
+                WriteText(ParseTeamText(_party.LeftVictim.CurrentStage.FinaleText, _party.LeftVictim));
+                WriteText(ParseTeamText(_party.RightVictim.CurrentStage.FinaleText, _party.RightVictim));
+            //}
+            //else
+            //{
+            //    WriteText(_party.Arbiters.Where(a => a != _party.Loser).FirstOrDefault().CurrentStage.FinaleText);
+            //    WriteText(_party.LeftVictim.CurrentStage.FinaleText);
+            //    WriteText(_party.RightVictim.CurrentStage.FinaleText);
+            //     WriteText(_party.Loser.CurrentStage.FinaleText);
+            // }
         }
 
         public void WriteText(string text)
@@ -102,51 +103,56 @@ namespace Chambers.Controllers
             AddText(_vm, text);
         }
 
+        public void FinishText()
+        {
+            _vm.Story = "@\"" + _vm.Story.Replace("\"", "\"\"") + "\"";
+        }
+
         public string ParseTeamText(string text, StoryCharacter character)
         {
             if (character.Position == Position.LeftArbiter)
             {
-                return text.Replace("[Name]", "[LAName]")
-                    .Replace("[Title]", "[LATitle]")
-                    .Replace("[PName]", "[LVName]")
-                    .Replace("[PTitle]", "[LVTitle]")
-                    .Replace("[OName]", "[RAName]")
-                    .Replace("[OTitle]", "[RATitle]")
-                    .Replace("[OVName]", "[RVName]")
-                    .Replace("[OVTitle]", "[RVTitle]");
+                text = text.Replace("[Name]", "[LAName]");
+                text = text.Replace("[Title]", "[LATitle]");
+                text = text.Replace("[PName]", "[LVName]");
+                text = text.Replace("[PTitle]", "[LVTitle]");
+                text = text.Replace("[OName]", "[RAName]");
+                text = text.Replace("[OTitle]", "[RATitle]");
+                text = text.Replace("[OVName]", "[RVName]");
+                   text = text.Replace("[OVTitle]", "[RVTitle]");
             }
             if (character.Position == Position.RightArbiter)
             {
-                return text.Replace("[Name]", "[RAName]")
-                    .Replace("[Title]", "[RATitle]")
-                    .Replace("[PName]", "[RVName]")
-                    .Replace("[PTitle]", "[RVTitle]")
-                    .Replace("[OName]", "[LAName]")
-                    .Replace("[OTitle]", "[LATitle]")
-                    .Replace("[OVName]", "[LVName]")
-                    .Replace("[OVTitle]", "[LVTitle]");
+                text = text.Replace("[Name]", "[RAName]");
+                text = text.Replace("[Title]", "[RATitle]");
+                text = text.Replace("[PName]", "[RVName]");
+                text = text.Replace("[PTitle]", "[RVTitle]");
+                text = text.Replace("[OName]", "[LAName]");
+                text = text.Replace("[OTitle]", "[LATitle]");
+                text = text.Replace("[OVName]", "[LVName]");
+                    text = text.Replace("[OVTitle]", "[LVTitle]");
             }
             if (character.Position == Position.LeftVictim)
             {
-                return text.Replace("[Name]", "[LVName]")
-                    .Replace("[Title]", "[LVTitle]")
-                    .Replace("[PName]", "[LAName]")
-                    .Replace("[PTitle]", "[LATitle]")
-                    .Replace("[OName]", "[RAName]")
-                    .Replace("[OTitle]", "[RATitle]")
-                    .Replace("[OVName]", "[RVName]")
-                    .Replace("[OVTitle]", "[RVTitle]");
+                text = text.Replace("[Name]", "[LVName]");
+                text = text.Replace("[Title]", "[LVTitle]");
+                text = text.Replace("[PName]", "[LAName]");
+                text = text.Replace("[PTitle]", "[LATitle]");
+                text = text.Replace("[OName]", "[RAName]");
+                text = text.Replace("[OTitle]", "[RATitle]");
+                text = text.Replace("[OVName]", "[RVName]");
+                    text = text.Replace("[OVTitle]", "[RVTitle]");
             }
             if (character.Position == Position.RightVictim)
             {
-                return text.Replace("[Name]", "[RVName]")
-                    .Replace("[Title]", "[RVTitle]")
-                    .Replace("[PName]", "[RAName]")
-                    .Replace("[PTitle]", "[RATitle]")
-                    .Replace("[OName]", "[LAName]")
-                    .Replace("[OTitle]", "[LATitle]")
-                    .Replace("[OVName]", "[LVName]")
-                    .Replace("[OVTitle]", "[LVTitle]");
+                text = text.Replace("[Name]", "[RVName]");
+                text = text.Replace("[Title]", "[RVTitle]");
+                text = text.Replace("[PName]", "[RAName]");
+                text = text.Replace("[PTitle]", "[RATitle]");
+                text = text.Replace("[OName]", "[LAName]");
+                text = text.Replace("[OTitle]", "[LATitle]");
+                text = text.Replace("[OVName]", "[LVName]");
+                    text = text.Replace("[OVTitle]", "[LVTitle]");
             }
             return text;
         }
@@ -169,31 +175,31 @@ namespace Chambers.Controllers
             vm.Story += text + "<br/><br/>";
         }
 
-        private List<Vote> Vote(int failures)
+        private List<Vote> Vote(int failures, Random rnd)
         {
             var leftArbiterVote = new Vote();
             var rightArbiterVote = new Vote();
 
-            var rnd = new Random();
+            
             var leftVote = rnd.Next(1, 101);
             var rightVote = rnd.Next(1, 101);
             var leftModifiers = _party.LeftArbiter.Character.Selflessness - _party.LeftArbiter.CurrentReluctance + _party.LeftArbiter.CurrentCompromise;
             var rightModifiers = _party.RightArbiter.Character.Selflessness - _party.RightArbiter.CurrentReluctance + _party.RightArbiter.CurrentCompromise;
-            if (leftModifiers < 10)
+            if (leftModifiers < 40)
             {
-                leftModifiers = 10;
+                leftModifiers = 40;
             }
-            if (leftModifiers > 90)
+            if (leftModifiers > 60)
             {
-                leftModifiers = 90;
+                leftModifiers = 60;
             }
-            if (rightModifiers < 10)
+            if (rightModifiers < 40)
             {
-                rightModifiers = 10;
+                rightModifiers = 40;
             }
-            if (rightModifiers > 90)
+            if (rightModifiers > 60)
             {
-                rightModifiers = 90;
+                rightModifiers = 60;
             }
 
             if (leftVote <= _party.LeftArbiter.Character.Selflessness - _party.LeftArbiter.CurrentReluctance + _party.LeftArbiter.CurrentCompromise)
@@ -227,10 +233,10 @@ namespace Chambers.Controllers
 
         private void AddCharacterIntros()
         {
-            _vm.Story += _party.LeftArbiter.CurrentStage.ProgressionText;
-            _vm.Story += _party.LeftVictim.CurrentStage.ProgressionText;
-            _vm.Story += _party.RightVictim.CurrentStage.ProgressionText;
-            _vm.Story += _party.RightArbiter.CurrentStage.ProgressionText;
+            WriteText(ParseTeamText(_party.LeftArbiter.CurrentStage.ProgressionText, _party.LeftArbiter));
+            WriteText(ParseTeamText(_party.LeftVictim.CurrentStage.ProgressionText, _party.LeftVictim));
+            WriteText(ParseTeamText(_party.RightVictim.CurrentStage.ProgressionText, _party.RightVictim));
+            WriteText(ParseTeamText(_party.RightArbiter.CurrentStage.ProgressionText, _party.RightArbiter));
         }
 
         private bool IsAnyCharacterFullyTransformed()
@@ -238,12 +244,14 @@ namespace Chambers.Controllers
             return (_party.Victims.Any(v => v.CurrentStageNum >= 10) || _party.Arbiters.Any(a => a.CurrentStageNum >= 5));
         }
 
-        private Party MapStoryCharacters(StoryViewModel model)
+        private Party MapStoryCharacters(HomeViewModel model)
         {
             var _db = new Entities();
             var victims = new List<StoryCharacter>();
             var arbiters = new List<StoryCharacter>();
             var party = new Party();
+
+            //Hard code for testing
 
             victims.AddRange(new List<StoryCharacter>{
                 new StoryCharacter()
@@ -268,8 +276,8 @@ namespace Chambers.Controllers
                 new StoryCharacter()
                 {
                     Character = model.LeftArbiter,
-                    Affliction = model.LeftArbiterAfflication,
-                    Stages = _db.GetCharacterStages(model.LeftArbiter.CharacterId, model.LeftArbiterAfflication.AfflicationId),
+                    Affliction = model.LeftArbiterAffliction,
+                    Stages = _db.GetCharacterStages(model.LeftArbiter.CharacterId, model.LeftArbiterAffliction.AfflicationId),
                     CurrentStageNum = 0,
                     CurrentReluctance = 0,
                     CurrentCompromise = 0,

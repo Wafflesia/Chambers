@@ -27,7 +27,8 @@ namespace Chambers.Models
 
         public List<CharacterAffliction> GetCharacterStages(int characterID, int afflictionID)
         {
-            var stages = CharacterAfflictions.Where(c => c.CharacterID == characterID && c.AfflictionID == afflictionID).ToList();
+            var stages = CharacterAfflictions.Where(c => c.CharacterID == characterID).ToList();
+            stages = stages.Where(c => c.AfflictionID == afflictionID).ToList();
             if (!stages.Any())
             {
                 stages = GetDefaultStages(afflictionID);

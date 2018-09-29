@@ -13,7 +13,7 @@ namespace Chambers.ViewModels
         public Character LeftVictim { get; set; }
         public Character RightVictim { get; set; }
 
-        public Affliction LeftArbiterAfflication { get; set; }
+        public Affliction LeftArbiterAffliction { get; set; }
         public Affliction RightArbiterAffliction { get; set; }
         public Affliction LeftVictimAffliction { get; set; }
         public Affliction RightVictimAffliction { get; set; }

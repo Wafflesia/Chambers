@@ -96,7 +96,7 @@ namespace Chambers.Models
         public CharacterAffliction CurrentStage {
             get
             {
-                return Stages.Where(s => s.Stage == CurrentStageNum).FirstOrDefault();
+                return Stages.Where(s => s.Stage.Value == CurrentStageNum).FirstOrDefault();
             }
         }
     }
