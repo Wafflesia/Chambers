@@ -61,7 +61,6 @@ namespace Chambers.Controllers
                    // WriteText(ParseTeamText(_party.RightArbiter.CurrentStage.VoteFailureReaction, _party.RightArbiter));
 
                     _party.LeftVictim.CurrentStageNum += 1;
-                    _party.RightVictim.CurrentStageNum += 1;
                     WriteText(ParseTeamText(_party.LeftVictim.CurrentStage.ProgressionText, _party.LeftVictim));
                     
                 }
