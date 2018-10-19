@@ -1,0 +1,32 @@
+﻿@model Chambers.ViewModels.CreateStageViewModel
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Creating Stage @Model.StageNum of @Model.CharacterName's @Model.AfflictionName Transformation</h2>
+
+@using (Html.BeginForm("Create", "Story", FormMethod.Post, new { data_toggle = "validator" }))
+{
+    @Html.HiddenFor(Model => Model.CharacterID)
+    @Html.HiddenFor(m => m.AfflictionID)
+    @Html.HiddenFor(m => m.StageNum)
+    <div>
+        <label>Descriptor</label> @Html.TextBoxFor(Model => Model.Descriptor)
+    </div><br />
+    <div>
+        <label>ProgressionText</label><br /> @Html.TextAreaFor(Model => Model.ProgressionText, new { rows = "7", cols = "100" })
+    </div><br />
+    if (!Model.IsVictimAffliction)
+    {
+        <div>
+            <label>Self Vote Text</label><br /> @Html.TextAreaFor(Model => Model.SVText, new { rows = "7", cols = "100" })
+        </div><br />
+        <div>
+            <label>Opponent Vote Text</label><br />  @Html.TextAreaFor(Model => Model.OVText, new { rows = "7", cols = "100" })
+        </div><br />
+    }
+    <div>
+        <label>Finale Text</label><br /> @Html.TextAreaFor(Model => Model.FinaleText, new { rows = "7", cols = "100" })
+    </div>
+    <button type="submit">Save</button>
+}

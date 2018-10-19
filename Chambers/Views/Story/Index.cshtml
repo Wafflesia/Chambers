@@ -1,0 +1,71 @@
+﻿@model Chambers.ViewModels.StoryStatusViewModel
+@{
+    ViewBag.Title = "Index";
+}
+
+<h4>Arbiter Afflictions</h4>
+@foreach(var affliction in Model.ArbiterAfflictions)
+{
+    <h3>@affliction.Affliction.Name</h3>
+    <table>
+        <tr>
+            <th>Character</th>
+            <th>Stage 0</th>
+            <th>Stage 1</th>
+            <th>Stage 2</th>
+            <th>Stage 3</th>
+            <th>Stage 4</th>
+            <th>Stage 5</th>
+        </tr>
+        @foreach(var character in affliction.CharactersWithStages)
+        {
+            var i = 0;
+            <tr>
+                <td>@character.CharacterName</td>
+                @foreach(var stage in character.AfflictionStage)
+                {
+                    <href></href>
+                    <td>@(stage.IsCompleted ? Html.ActionLink("x", "Edit", new { characterAfflictionID = stage.AfflictionStageID }) : Html.ActionLink("-", "Create", new { characterID = character.CharacterID, afflictionID = affliction.Affliction.AfflicationId, stageNum = i }))</td>
+                    i++;
+                }
+            </tr>
+        }
+    </table>
+}
+
+<h4>Victim Afflictions</h4>
+@foreach (var affliction in Model.VictimAfflictions)
+{
+    <h3>@affliction.Affliction.Name</h3>
+    <table>
+        <tr>
+            <th>Character</th>
+            <th>Stage 0</th>
+            <th>Stage 1</th>
+            <th>Stage 2</th>
+            <th>Stage 3</th>
+            <th>Stage 4</th>
+            <th>Stage 5</th>
+            <th>Stage 6</th>
+            <th>Stage 7</th>
+            <th>Stage 8</th>
+            <th>Stage 9</th>
+            <th>Stage 10</th>
+        </tr>
+        @foreach (var character in affliction.CharactersWithStages)
+        {
+            var i = 0;
+            <tr>
+                <td>@character.CharacterName</td>
+                
+                @foreach (var stage in character.AfflictionStage)
+                {
+
+                    <td>@(stage.IsCompleted ? Html.ActionLink("x", "Edit", new { characterAfflictionID = stage.AfflictionStageID }) : Html.ActionLink("-", "Create", new { characterID = character.CharacterID, afflictionID = affliction.Affliction.AfflicationId, stageNum = i }))</td>
+                    i++;
+                }
+            </tr>
+        }
+    </table>
+}
+

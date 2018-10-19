@@ -63,7 +63,6 @@ namespace Chambers.Controllers
                     _party.LeftVictim.CurrentStageNum += 1;
                     _party.RightVictim.CurrentStageNum += 1;
                     WriteText(ParseTeamText(_party.LeftVictim.CurrentStage.ProgressionText, _party.LeftVictim));
-                    //WriteText(ParseTeamText(_party.RightVictim.CurrentStage.ProgressionText, _party.RightVictim));
                     
                 }
                 //Advance stages, write text results
@@ -86,7 +85,6 @@ namespace Chambers.Controllers
                 WriteText(ParseTeamText(_party.RightArbiter.CurrentStage.FinaleText, _party.RightArbiter));
                 WriteText("[LAName] and [RAName] rush outside as best they can and watch with horror as their former comrades are deposited on the conveyor in front of them.");
                 WriteText(ParseTeamText(_party.LeftVictim.CurrentStage.FinaleText, _party.LeftVictim));
-                WriteText(ParseTeamText(_party.RightVictim.CurrentStage.FinaleText, _party.RightVictim));
             //}
             //else
             //{
@@ -161,10 +159,10 @@ namespace Chambers.Controllers
         {
             return text.Replace("[LVName]", _party.LeftVictimName)
                        .Replace("[LAName]", _party.LeftArbiterName)
-                       .Replace("[RVName]", _party.RightVictimName)
+                       .Replace("[RVName]", _party.LeftVictimName)
                        .Replace("[RAName]", _party.RightArbiterName)
                        .Replace("[LVTitle]", _party.LeftVictim.CurrentStage.Descriptor)
-                       .Replace("[RVTitle]", _party.RightVictim.CurrentStage.Descriptor)
+                       .Replace("[RVTitle]", _party.LeftVictim.CurrentStage.Descriptor)
                        .Replace("[LATitle]", _party.LeftArbiter.CurrentStage.Descriptor)
                        .Replace("[RATitle]", _party.RightArbiter.CurrentStage.Descriptor);
             
@@ -235,7 +233,6 @@ namespace Chambers.Controllers
         {
             WriteText(ParseTeamText(_party.LeftArbiter.CurrentStage.ProgressionText, _party.LeftArbiter));
             WriteText(ParseTeamText(_party.LeftVictim.CurrentStage.ProgressionText, _party.LeftVictim));
-            WriteText(ParseTeamText(_party.RightVictim.CurrentStage.ProgressionText, _party.RightVictim));
             WriteText(ParseTeamText(_party.RightArbiter.CurrentStage.ProgressionText, _party.RightArbiter));
         }
 
@@ -261,14 +258,6 @@ namespace Chambers.Controllers
                     Stages = _db.GetCharacterStages(model.LeftVictim.CharacterId, model.LeftVictimAffliction.AfflicationId),
                     CurrentStageNum = 0,
                     Position = Position.LeftVictim
-                },
-                new StoryCharacter()
-                {
-                    Character = model.RightVictim,
-                    Affliction = model.RightVictimAffliction,
-                    Stages = _db.GetCharacterStages(model.RightVictim.CharacterId, model.RightVictimAffliction.AfflicationId),
-                    CurrentStageNum = 0,
-                    Position = Position.RightVictim
                 }
             });
 

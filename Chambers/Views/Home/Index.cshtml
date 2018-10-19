@@ -27,13 +27,5 @@ Left Victim
 Affliction
 @Html.DropDownList("LeftVictimAfflictionID", Model.VictimAfflictions.ToSelectList(a => a.Name, a => a.AfflicationId.ToString(), "--"))<br />
 </div>
-
-<div>
-Right Victim
-@Html.DropDownList("RightVictimID", Model.Characters.ToSelectList(c => c.Name, c => c.CharacterId.ToString(), "--"))
-
-Affliction
-@Html.DropDownList("RightVictimAfflictionID", Model.VictimAfflictions.ToSelectList(a => a.Name, a => a.AfflicationId.ToString(), "--"))<br />
-</div>
     <button type="submit">Submit</button>
 }
